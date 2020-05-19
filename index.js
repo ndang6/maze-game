@@ -1,47 +1,54 @@
-const { Engine, Render, Runner, World, Bodies, MouseConstraint, Mouse } = Matter;
+const { Engine, Render, Runner, World, Bodies } = Matter;
 
 const engine = Engine.create();
 const { world } = engine;
 
-const width = 800;
+const cells = 3;
+const width = 600;
 const height = 600;
 
 const render = Render.create({
 	element: document.body,
 	engine: engine,
-	options: { wireframes: false, width, height }
+	//options: { wireframes: false, width, height }
+	options: { width, height }
 });
 Render.run(render);
 Runner.run(Runner.create(), engine);
 
-World.add(
-	world,
-	MouseConstraint.create(engine, {
-		mouse: Mouse.create(render.canvas)
-	})
-);
-
 // Walls
 const walls = [
-	Bodies.rectangle(400, 0, 800, 40, { isStatic: true }),
-	Bodies.rectangle(400, 600, 800, 40, { isStatic: true }),
-	Bodies.rectangle(0, 300, 40, 600, { isStatic: true }),
-	Bodies.rectangle(800, 300, 40, 600, { isStatic: true })
+	Bodies.rectangle(width / 2, 0, width, 40, { isStatic: true }),
+	Bodies.rectangle(width / 2, height, width, 40, { isStatic: true }),
+	Bodies.rectangle(0, height / 2, 40, height, { isStatic: true }),
+	Bodies.rectangle(width, height / 2, 40, height, { isStatic: true })
 ];
 World.add(world, walls);
 
-// Random Shapes
-for (let i = 0; i < 40; i++) {
-	if (Math.random() > 0.5) {
-		World.add(world, Bodies.rectangle(Math.random() * width, Math.random() * height, 50, 50));
-	} else {
-		World.add(
-			world,
-			Bodies.circle(Math.random() * width, Math.random() * height, 35, {
-				render: {
-					fillStyle: 'green'
-				}
-			})
-		);
-	}
-}
+const grid = Array(cells).fill(null).map(() => Array(cells).fill(false));
+// const grid = [];
+// for (let i = 0; i < 3; i++) {
+// 	grid.push([]);
+// 	for (let j = 0; j < 3; j++) {
+// 		grid[i].push(false);
+// 	}
+// }
+
+const verticals = Array(cells).fill(null).map(() => Array(cells - 1).fill(false));
+const horizontals = Array(cells - 1).fill(null).map(() => Array(cells).fill(false));
+
+const startRow = Math.floor(Math.random() * cells);
+const startColumn = Math.floor(Math.random() * cells);
+
+const stepThroughCell = (row, column) => {
+	// If visited, return
+	// Mark as visited
+	// Assemble list of neighbors
+	// For each neighbor...
+	// See if that neighbor is out of bounds
+	// Skip all neighbors that we visited
+	// Remove the wall
+	// Visit the next neighbor
+};
+
+stepThroughCell(startRow, startColumn);
