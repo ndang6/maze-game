@@ -1,3 +1,6 @@
 # maze-game
-Build a mini web game
+Matter JS Demo
+![](MatterJSDemo.gif)
+
+Maze Game
 ![](maze.gif)
