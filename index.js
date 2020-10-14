@@ -1,7 +1,7 @@
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
-const cellsHorizontal = 6;
-const cellsVertical = 4;
+const cellsHorizontal = 7;
+const cellsVertical = 7;
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -16,7 +16,6 @@ const render = Render.create({
 	element: document.body,
 	engine: engine,
 	options: { wireframes: false, width, height }
-	// options: { width, height }
 });
 Render.run(render);
 Runner.run(Runner.create(), engine);
@@ -46,13 +45,6 @@ const shuffle = (arr) => {
 	return arr;
 };
 
-// const grid = [];
-// for (let i = 0; i < 3; i++) {
-// 	grid.push([]);
-// 	for (let j = 0; j < 3; j++) {
-// 		grid[i].push(false);
-// 	}
-// }
 const grid = Array(cellsVertical).fill(null).map(() => Array(cellsHorizontal).fill(false));
 const verticals = Array(cellsVertical).fill(null).map(() => Array(cellsHorizontal - 1).fill(false));
 const horizontals = Array(cellsVertical - 1).fill(null).map(() => Array(cellsHorizontal).fill(false));
@@ -162,7 +154,9 @@ const goal = Bodies.rectangle(width - unitLengthX / 2, height - unitLengthY / 2,
 	label: 'goal',
 	isStatic: true,
 	render: {
-		fillStyle: 'green'
+		fillStyle: 'green',
+		strokeStyle: 'yellow',
+        lineWidth: 3
 	}
 });
 World.add(world, goal);
@@ -181,19 +175,20 @@ World.add(world, ball);
 document.addEventListener('keydown', (event) => {
 	const { x, y } = ball.velocity;
 
-	if (event.keyCode === 87) {
+	if (event.key === 'w') {
 		Body.setVelocity(ball, { x, y: y - 5 });
-	} else if (event.keyCode === 68) {
+	} else if (event.key === 'd') {
 		Body.setVelocity(ball, { x: x + 5, y });
-	} else if (event.keyCode === 83) {
+	} else if (event.key === 's') {
 		Body.setVelocity(ball, { x, y: y + 5 });
-	} else if (event.keyCode === 65) {
+	} else if (event.key === 'a') {
 		Body.setVelocity(ball, { x: x - 5, y });
 	}
 });
 
 // WIN CONDITION
 Events.on(engine, 'collisionStart', (event) => {
+	document.querySelector('.instruction').classList.add('hidden');
 	event.pairs.forEach((collision) => {
 		const labels = [ 'ball', 'goal' ];
 		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
