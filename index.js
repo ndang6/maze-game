@@ -1,7 +1,7 @@
-const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
+const { Engine, Render, Runner, Bodies, World, Body, Events, Composite } = Matter;
 
-const cellsHorizontal = 7;
-const cellsVertical = 7;
+const cellsHorizontal = 13;
+const cellsVertical = 13;
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -101,98 +101,177 @@ const stepThroughCell = (row, column) => {
 // stepThroughCell(1, 1);
 stepThroughCell(startRow, startColumn);
 
-horizontals.forEach((row, rowIndex) => {
-	row.forEach((open, columnIndex) => {
-		if (open) {
-			return;
+
+setTimeout(function(){
+	horizontals.forEach((row, rowIndex) => {
+		row.forEach((open, columnIndex) => {
+			if (open) {
+				return;
+			}
+	
+			const wall = Bodies.rectangle(
+				columnIndex * unitLengthX + unitLengthX / 2,
+				rowIndex * unitLengthY + unitLengthY,
+				unitLengthX,
+				5,
+				{
+					label: 'wall',
+					isStatic: true,
+					render: {
+						fillStyle: 'red'
+					}
+				}
+			);
+	
+			World.add(world, wall);
+		});
+	});
+	
+	verticals.forEach((row, rowIndex) => {
+		row.forEach((open, columnIndex) => {
+			if (open) {
+				return;
+			}
+	
+			const wall = Bodies.rectangle(
+				columnIndex * unitLengthX + unitLengthX,
+				rowIndex * unitLengthY + unitLengthY / 2,
+				5,
+				unitLengthY,
+				{
+					label: 'wall',
+					isStatic: true,
+					render: {
+						fillStyle: 'red'
+					}
+				}
+			);
+	
+			World.add(world, wall);
+		});
+	});
+
+	document.querySelector('.instruction').classList.add("hidden");
+
+	// KEYPRESSES
+	document.addEventListener('keydown', (event) => {
+		const { x, y } = ball0.velocity;
+		if (event.key === 'w') {
+			Body.setVelocity(ball1, { x, y: y - 5 });
+		} else if (event.key === 'd') {
+			Body.setVelocity(ball1, { x: x + 5, y });
+		} else if (event.key === 's') {
+			Body.setVelocity(ball1, { x, y: y + 5 });
+		} else if (event.key === 'a') {
+			Body.setVelocity(ball1, { x: x - 5, y });
 		}
 
-		const wall = Bodies.rectangle(
-			columnIndex * unitLengthX + unitLengthX / 2,
-			rowIndex * unitLengthY + unitLengthY,
-			unitLengthX,
-			5,
-			{
-				label: 'wall',
-				isStatic: true,
-				render: {
-					fillStyle: 'red'
-				}
-			}
-		);
-
-		World.add(world, wall);
-	});
-});
-
-verticals.forEach((row, rowIndex) => {
-	row.forEach((open, columnIndex) => {
-		if (open) {
-			return;
+		if (event.key === '8') {
+			Body.setVelocity(ball2, { x, y: y - 5 });
+		} else if (event.key === '6') {
+			Body.setVelocity(ball2, { x: x + 5, y });
+		} else if (event.key === '5') {
+			Body.setVelocity(ball2, { x, y: y + 5 });
+		} else if (event.key === '4') {
+			Body.setVelocity(ball2, { x: x - 5, y });
 		}
-
-		const wall = Bodies.rectangle(
-			columnIndex * unitLengthX + unitLengthX,
-			rowIndex * unitLengthY + unitLengthY / 2,
-			5,
-			unitLengthY,
-			{
-				label: 'wall',
-				isStatic: true,
-				render: {
-					fillStyle: 'red'
-				}
-			}
-		);
-
-		World.add(world, wall);
 	});
-});
+}, 5000);
+
 
 // GOAL
-const goal = Bodies.rectangle(width - unitLengthX / 2, height - unitLengthY / 2, unitLengthX * 0.7, unitLengthY * 0.7, {
+let a = 1;
+let b = 1;
+let goal = Bodies.rectangle(width - a * unitLengthX / 2, height - b * unitLengthY / 2, unitLengthX * 0.7, unitLengthY * 0.7, {
 	label: 'goal',
 	isStatic: true,
 	render: {
 		fillStyle: 'green',
 		strokeStyle: 'yellow',
-        lineWidth: 3
+		lineWidth: 3,
 	}
 });
+
 World.add(world, goal);
+
+var updateTargetLocation = setInterval(function(){
+	World.remove(world, goal);
+
+	while(true){
+		let randomA = Math.floor(Math.random() * cellsVertical) + 1;
+		if(randomA % 2 != 0){
+			a = randomA;
+			break;
+		}
+	}
+
+	while(true){
+		let randomB = Math.floor(Math.random() * cellsHorizontal) + 1;
+		if(randomB % 2 != 0){
+			b = randomB;
+			break;
+		}
+	}	
+
+	document.getElementById("target").style.left = Math.floor(width - a * unitLengthX / 2 - 10) + "px";
+	document.getElementById("target").style.top = Math.floor(height - b * unitLengthX / 2 + 70) + "px";
+	goal = Bodies.rectangle(width - a * unitLengthX / 2, height - b * unitLengthY / 2, unitLengthX * 0.7, unitLengthY * 0.7, {
+		label: 'goal',
+		isStatic: true,
+		render: {
+			fillStyle: 'green',
+			strokeStyle: 'yellow',
+			lineWidth: 3
+		}
+	});
+	World.add(world, goal);
+}, 15000);
 
 // BALL
 const ballRadius = Math.min(unitLengthX, unitLengthY) / 4;
-const ball = Bodies.circle(unitLengthX / 2, unitLengthY / 2, ballRadius, {
-	label: 'ball',
+const ball0 = Bodies.circle(unitLengthX / 2, unitLengthY / 2, ballRadius, {
+	label: 'ball0',
+	render: {
+		fillStyle: 'white'
+	}
+});
+const ball1 = Bodies.circle(unitLengthX / 1.5, unitLengthY / 2, ballRadius, {
+	label: 'ball1',
 	render: {
 		fillStyle: 'blue'
 	}
 });
-World.add(world, ball);
-
-// KEYPRESSES
-document.addEventListener('keydown', (event) => {
-	const { x, y } = ball.velocity;
-
-	if (event.key === 'w') {
-		Body.setVelocity(ball, { x, y: y - 5 });
-	} else if (event.key === 'd') {
-		Body.setVelocity(ball, { x: x + 5, y });
-	} else if (event.key === 's') {
-		Body.setVelocity(ball, { x, y: y + 5 });
-	} else if (event.key === 'a') {
-		Body.setVelocity(ball, { x: x - 5, y });
+const ball2 = Bodies.circle(unitLengthX / 5, unitLengthY / 2, ballRadius, {
+	label: 'ball2',
+	render: {
+		fillStyle: 'green'
 	}
 });
+World.add(world, ball1);
+World.add(world, ball2);
+
 
 // WIN CONDITION
 Events.on(engine, 'collisionStart', (event) => {
-	document.querySelector('.instruction').classList.add('hidden');
+	
 	event.pairs.forEach((collision) => {
-		const labels = [ 'ball', 'goal' ];
-		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
-			document.querySelector('.winner').classList.remove('hidden');
+		const labels1 = [ 'ball1', 'goal' ];
+		const labels2 = [ 'ball2', 'goal' ];
+		if (labels1.includes(collision.bodyA.label) && labels1.includes(collision.bodyB.label)) {
+			document.querySelector('.winner1').classList.remove('hidden');
+			World.remove(world, goal);
+			clearInterval(updateTargetLocation);
+			world.gravity.y = 1;
+			world.bodies.forEach((body) => {
+				if (body.label === 'wall') {
+					Body.setStatic(body, false);
+				}
+			});
+		}
+		if (labels2.includes(collision.bodyA.label) && labels2.includes(collision.bodyB.label)) {
+			document.querySelector('.winner2').classList.remove('hidden');
+			World.remove(world, goal);
+			clearInterval(updateTargetLocation);
 			world.gravity.y = 1;
 			world.bodies.forEach((body) => {
 				if (body.label === 'wall') {
@@ -202,3 +281,5 @@ Events.on(engine, 'collisionStart', (event) => {
 		}
 	});
 });
+
+
