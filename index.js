@@ -152,6 +152,7 @@ setTimeout(function(){
 	});
 
 	document.querySelector('.instruction').classList.add("hidden");
+	document.getElementById("target").innerHTML = "Target"
 
 	// KEYPRESSES
 	document.addEventListener('keydown', (event) => {
