@@ -152,7 +152,6 @@ setTimeout(function(){
 	});
 
 	document.querySelector('.instruction').classList.add("hidden");
-	document.getElementById("target").innerHTML = "Target"
 
 	// KEYPRESSES
 	document.addEventListener('keydown', (event) => {
@@ -195,6 +194,16 @@ let goal = Bodies.rectangle(width - a * unitLengthX / 2, height - b * unitLength
 
 World.add(world, goal);
 
+var count = 15;
+var timer = setInterval(function(){
+	count = count - 1;
+	console.log(count);
+	document.getElementById("target").innerHTML = count;	
+	if(count == 0){
+		count = 15;
+	}
+}, 1000)
+
 var updateTargetLocation = setInterval(function(){
 	World.remove(world, goal);
 
@@ -214,8 +223,6 @@ var updateTargetLocation = setInterval(function(){
 		}
 	}	
 
-	document.getElementById("target").style.left = Math.floor(width - a * unitLengthX / 2 - 10) + "px";
-	document.getElementById("target").style.top = Math.floor(height - b * unitLengthX / 2 + 70) + "px";
 	goal = Bodies.rectangle(width - a * unitLengthX / 2, height - b * unitLengthY / 2, unitLengthX * 0.7, unitLengthY * 0.7, {
 		label: 'goal',
 		isStatic: true,
@@ -262,6 +269,7 @@ Events.on(engine, 'collisionStart', (event) => {
 			document.querySelector('.winner1').classList.remove('hidden');
 			World.remove(world, goal);
 			clearInterval(updateTargetLocation);
+			clearInterval(timer);
 			world.gravity.y = 1;
 			world.bodies.forEach((body) => {
 				if (body.label === 'wall') {
@@ -273,6 +281,7 @@ Events.on(engine, 'collisionStart', (event) => {
 			document.querySelector('.winner2').classList.remove('hidden');
 			World.remove(world, goal);
 			clearInterval(updateTargetLocation);
+			clearInterval(timer);
 			world.gravity.y = 1;
 			world.bodies.forEach((body) => {
 				if (body.label === 'wall') {
