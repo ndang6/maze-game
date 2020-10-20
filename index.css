@@ -1,6 +1,7 @@
 body {
-    margin: 0
+    margin: 0;
 }
+
 
 .hidden {
     display: none !important;
@@ -23,12 +24,27 @@ h1{
 
 .winner2{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: absolute;
     z-index: 1;
     height: 100vh;
     width: 100vw;
+}
+
+.winner2 > button {
+    padding:0.7em 1.4em;
+    margin:0 0.3em 0.3em 0;
+    text-decoration: none;
+    background-color: none;
+    color: black;
+    font-size: 20px;
+    position: relative;
+}
+
+.winner2 > button:active{
+    top: 2px;
 }
 
 .instruction{

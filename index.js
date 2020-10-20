@@ -15,7 +15,7 @@ const { world } = engine;
 const render = Render.create({
 	element: document.body,
 	engine: engine,
-	options: { wireframes: false, width, height }
+	options: { wireframes: false, width, height, background: 'black' }
 });
 Render.run(render);
 Runner.run(Runner.create(), engine);
@@ -30,7 +30,7 @@ const walls = [
 ];
 World.add(world, walls);
 
-// Maze Generation
+// ensure randomness of the maze
 const shuffle = (arr) => {
 	let counter = arr.length;
 
@@ -45,15 +45,18 @@ const shuffle = (arr) => {
 	return arr;
 };
 
+const setup = () => {
+	
+}
 const grid = Array(cellsVertical).fill(null).map(() => Array(cellsHorizontal).fill(false));
 const verticals = Array(cellsVertical).fill(null).map(() => Array(cellsHorizontal - 1).fill(false));
 const horizontals = Array(cellsVertical - 1).fill(null).map(() => Array(cellsHorizontal).fill(false));
-
 const startRow = Math.floor(Math.random() * cellsVertical);
 const startColumn = Math.floor(Math.random() * cellsHorizontal);
 
+/* Maze Generation */
 const stepThroughCell = (row, column) => {
-	// If visited, return
+	// base case
 	if (grid[row][column]) {
 		return;
 	}
@@ -98,7 +101,6 @@ const stepThroughCell = (row, column) => {
 	}
 };
 
-// stepThroughCell(1, 1);
 stepThroughCell(startRow, startColumn);
 
 
@@ -176,7 +178,7 @@ setTimeout(function(){
 			Body.setVelocity(ball2, { x: x - 5, y });
 		}
 	});
-}, 5000);
+}, 15000);
 
 
 // GOAL
@@ -197,7 +199,6 @@ World.add(world, goal);
 var count = 15;
 var timer = setInterval(function(){
 	count = count - 1;
-	console.log(count);
 	document.getElementById("target").innerHTML = count;	
 	if(count == 0){
 		count = 15;
@@ -291,5 +292,11 @@ Events.on(engine, 'collisionStart', (event) => {
 		}
 	});
 });
+
+document.getElementById("restart").addEventListener("click", function(){
+	console.log("clicked");
+	location.reload();
+	return false;
+})
 
 
