@@ -182,8 +182,8 @@ let goal = Bodies.rectangle(width - a * unitLengthX / 2, height - b * unitLength
 	label: 'goal',
 	isStatic: true,
 	render: {
-		fillStyle: 'green',
-		strokeStyle: 'yellow',
+		fillStyle: 'yellow',
+		strokeStyle: 'white',
 		lineWidth: 3,
 	}
 });
@@ -287,10 +287,16 @@ Events.on(engine, 'collisionStart', (event) => {
 	});
 });
 
-document.getElementById("restart").addEventListener("click", function(){
+document.getElementById("restart1").addEventListener("click", function(){
 	console.log("clicked");
 	location.reload();
 	return false;
-})
+});
+
+document.getElementById("restart2").addEventListener("click", function(){
+	console.log("clicked");
+	location.reload();
+	return false;
+});
 
 
