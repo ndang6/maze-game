@@ -45,9 +45,6 @@ const shuffle = (arr) => {
 	return arr;
 };
 
-const setup = () => {
-	
-}
 const grid = Array(cellsVertical).fill(null).map(() => Array(cellsHorizontal).fill(false));
 const verticals = Array(cellsVertical).fill(null).map(() => Array(cellsHorizontal - 1).fill(false));
 const horizontals = Array(cellsVertical - 1).fill(null).map(() => Array(cellsHorizontal).fill(false));
@@ -103,14 +100,11 @@ const stepThroughCell = (row, column) => {
 
 stepThroughCell(startRow, startColumn);
 
-
 setTimeout(function(){
 	horizontals.forEach((row, rowIndex) => {
 		row.forEach((open, columnIndex) => {
-			if (open) {
-				return;
-			}
-	
+			if(open) return;
+				
 			const wall = Bodies.rectangle(
 				columnIndex * unitLengthX + unitLengthX / 2,
 				rowIndex * unitLengthY + unitLengthY,
@@ -178,7 +172,7 @@ setTimeout(function(){
 			Body.setVelocity(ball2, { x: x - 5, y });
 		}
 	});
-}, 15000);
+}, 5000);
 
 
 // GOAL

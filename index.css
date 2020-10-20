@@ -39,9 +39,11 @@ h1{
     margin:0 0.3em 0.3em 0;
     text-decoration: none;
     background-color: none;
-    color: black;
+    color: white;
+    background-color: forestgreen;
     font-size: 20px;
     position: relative;
+    border: none;
 }
 
 .winner2 > button:active{
@@ -53,9 +55,11 @@ h1{
     margin:0 0.3em 0.3em 0;
     text-decoration: none;
     background-color: none;
-    color: black;
+    color: white;
+    background-color: dodgerblue;
     font-size: 20px;
     position: relative;
+    border: none;
 }
 
 .winner1 > button:active{
